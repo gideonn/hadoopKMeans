@@ -1,4 +1,3 @@
-#!/usr/bin/env bash
+#!/usr/bin/bash
 
-
-hadoop jar /usr/local/Cellar/hadoop/2.7.2/libexec/share/hadoop/tools/lib/hadoop-streaming-2.7.2.jar -file mapper.py -mapper mapper.py -file reducer.py -reducer reducer.py -input /user/601cse/cho.txt -output /user/601cse/choOutput
+hdfs dfs -rm -r test/output; hadoop jar /usr/local/hadoop/share/hadoop/tools/lib/hadoop-streaming-2.8.1.jar -file mapper.py -mapper mapper.py -file reducer.py -reducer reducer.py -input ./cho.txt -output test/output

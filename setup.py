@@ -15,6 +15,9 @@ def createCentroidsFile(k, inputFile):
     print("Created centroids.txt with centroids as :{}".format(' '.join(centroids)))
 
 
+def cleanFiles():
+    #delete result cluster data points
+    pass
 
 if __name__ == '__main__':
     inputFile = input("Enter the name of the input file: ")

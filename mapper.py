@@ -6,7 +6,6 @@ import numpy as np
 
 global centroids
 centroids = []
-k=3
 
 # filename = 'centroids.txt'
 
