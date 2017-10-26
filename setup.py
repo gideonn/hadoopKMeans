@@ -10,9 +10,9 @@ def createCentroidsFile(k, inputFile):
     centroids = data[:k]
 
     with open('centroids1.txt', 'w') as f:
-        f.write('\t'.join(centroids))
+        f.write(' '.join(centroids))
 
-    print("Created centroids.txt with centroids as :{}".format(centroids))
+    print("Created centroids.txt with centroids as :{}".format(' '.join(centroids)))
 
 
 
