@@ -32,6 +32,7 @@ def getPairs(data_points):
         for j in range(i + 1, len(data_points)):
             pairs.append([data_points[i], data_points[j]])
             pairs.append([data_points[j], data_points[i]])
+
     return pairs
 
 
@@ -52,7 +53,7 @@ def createGroundTruthMatrix(data_set):
     for key in dict.keys():
         genes = dict[key]
         ids = [gene.id for gene in genes]
-        # ids = list(range(1,len(data_set)+1))
+        # print(key)
         # print(ids)
         pairs = getPairs(ids)
         for p in pairs:
@@ -67,9 +68,11 @@ def createClusterMatrix(data_set_length):
 
     Matrix = [[0 for x in range(data_set_length)] for y in range(data_set_length)]
     for key in dict.keys():
-        # genes = dict[key]
-        ids = list(range(1,data_set_length+1))
+        genes = dict[key]
+        ids = [geneID[0] for geneID in genes]
+        # print(ids)
         pairs = getPairs(ids)
+        # print(pairs)
         for p in pairs:
             Matrix[p[0]-1][p[1]-1] = 1
     return Matrix

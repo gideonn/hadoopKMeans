@@ -6,15 +6,18 @@ import collections
 import math
 
 clusterDict = collections.defaultdict(int)
+geneIDDict = collections.defaultdict(int)
 
 
 for line in sys.stdin:
-    # print(line)
+    # print("Line:" + line)
     line = json.loads(line)
+
     clusterID = line[0]
-    dataPoints = line[1]
-    # print("Cluster: {}".format(line[0]))
-    # print("Datapoints: {}".format(line[1]))
+    geneID = line[1][0]
+    dataPoints = line[1][1:]
+
+    # print("ClusterID: {} \n geneID: {} \n dataPoints: {}".format(clusterID,geneID,dataPoints))
 
     try:
         clusterDict[clusterID] = clusterDict[clusterID] + [dataPoints]
@@ -22,6 +25,13 @@ for line in sys.stdin:
         #handle the case where clusterDict[clusterID] gives 0
         clusterDict[clusterID] = [] + [dataPoints]
 
+    try:
+        geneIDDict[clusterID] = geneIDDict[clusterID] + [geneID]
+    except:
+        # handle the case where clusterDict[clusterID] gives 0
+        geneIDDict[clusterID] = [] + [geneID]
+
+    # print(clusterDict)
 
 #for each clusterID, iterate the list, for each first item in list avg and get the new centroid list for that clusterID
 newCentroidVals = []
@@ -44,7 +54,7 @@ with open('centroids.txt', 'r') as f:
 
 if oldCentroidVals == newCentroidVals:
     with open('clusterResults.txt', 'w') as f:
-        f.write(json.dumps(clusterDict))
+        f.write(json.dumps(geneIDDict))
 
     with open('stopIteration', 'w') as f:
         f.write(" ")
