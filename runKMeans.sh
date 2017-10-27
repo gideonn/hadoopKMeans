@@ -1,6 +1,9 @@
 #!/bin/bash
 
 num_itr=0
+
+rm -f stopIteration
+
 while :
 do
 if [ ! -f 'stopIteration' ]; then
@@ -9,6 +12,8 @@ if [ ! -f 'stopIteration' ]; then
     hdfs dfs -rm -r test/output; hadoop jar /usr/local/hadoop/share/hadoop/tools/lib/hadoop-streaming-2.8.1.jar -file mapper.py -mapper mapper.py -file reducer.py -reducer reducer.py -input ./cho.txt -output test/output
     else
         echo "Converged after $num_itr iterations! Stopping iteration"
+        echo "Classification Result (Cluster: GeneIDs):"
+        cat clusterResults.txt
         break
 fi
 done
