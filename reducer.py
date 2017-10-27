@@ -41,13 +41,11 @@ with open('centroids.txt', 'r') as f:
     for line in f:
         oldCentroidVals.append([float(data) for data in line.split()])
 
-# with open('clusterData.txt', 'a') as f:
-#     f.write("---- \n")
-#     for key,val in clusterDict.items():
-#         data = str(key) + ' : ' + ' '.join(str(v) for v in val)
-#         f.write(data)
 
 if oldCentroidVals == newCentroidVals:
+    with open('clusterResults.txt', 'w') as f:
+        f.write(json.dumps(clusterDict))
+
     with open('stopIteration', 'w') as f:
         f.write(" ")
 

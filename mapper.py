@@ -30,6 +30,7 @@ def kmeansMapper(filename):
     loadCentroids(filename)
     points = []
     for line in sys.stdin:
+        geneID = [id for id in (line.split()[0])]
         points = [float(point) for point in (line.split()[2:])]
 
         distance = float('inf')
