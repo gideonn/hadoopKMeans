@@ -1,4 +1,9 @@
 import json
+import numpy as np
+import matplotlib.pyplot as plt
+import pandas as pd
+from sklearn import decomposition
+from sklearn.preprocessing import StandardScaler
 
 def loadDataSet(filePath):
     data_set = []
@@ -115,6 +120,43 @@ def calculateJaccardCoefficient(incidence_matrix):
     return jaccardCoefficient
 
 
+# perform PCA
+def PCA(dic):
+    c = []
+    data = []
+    for key in dic:
+        for i in range(len(dic[key])):
+            c.append(key)
+            data.append(dic[key][i])
+    finalData = np.array(data)
+    labels = np.array(c)
+    # print(finalData)
+    # print(labels)
+    pca = decomposition.PCA(n_components=2)
+    finalData = np.mat(pca.fit_transform(finalData))
+
+    return finalData, labels
+
+# plot graph
+def plotGraph(filename, finalData,labels):
+    #create dataframe and group based on labels
+    df = pd.DataFrame(dict(x=np.asarray(finalData.T[0])[0], y=np.asarray(finalData.T[1])[0], label=labels))
+    groups = df.groupby('label')
+    fig, ax = plt.subplots()
+    ax.margins(0.05)
+
+    #plot all datapoints
+    for name, group in groups:
+        ax.plot(group.x, group.y, marker='o', linestyle='', ms=5, label=name)
+
+    ax.legend()
+    ax.set_title('Algorithm: KMeans\n Input file: ' + filename)
+    plt.xlabel('PCA1')
+    plt.ylabel('PCA2')
+
+    plt.savefig('PCA_' + filename + ".png", dpi=300)
+    plt.show()
+
 
 if __name__ == '__main__':
 
@@ -137,3 +179,13 @@ if __name__ == '__main__':
 
     print("Rand Co-efficient: ",randCoefficient)
     print("Jaccard Co-efficient: ", jaccardCoefficient)
+
+
+    #Plotting the clusters using PCA
+    dataForPCA = json.load(open('dataPointsResults.txt'))
+
+    #perform PCA
+    data, labels = PCA(dataForPCA)
+
+    #plot Graph
+    plotGraph('KMeansClustering_PCA_plot',data,labels)

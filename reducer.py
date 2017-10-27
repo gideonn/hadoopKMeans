@@ -56,6 +56,9 @@ if oldCentroidVals == newCentroidVals:
     with open('clusterResults.txt', 'w') as f:
         f.write(json.dumps(geneIDDict))
 
+    with open('dataPointsResults.txt', 'w') as f:
+        f.write(json.dumps(clusterDict))
+
     with open('stopIteration', 'w') as f:
         f.write(" ")
 
