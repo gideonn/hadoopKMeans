@@ -7,49 +7,56 @@ import math
 
 clusterDict = collections.defaultdict(int)
 
-def getCentroids(filename):
-    with open(filename) as f:
-        centroids = f.readline().split()
-
-    return centroids
 
 for line in sys.stdin:
+    # print(line)
     line = json.loads(line)
     clusterID = line[0]
     dataPoints = line[1]
-    #print("Cluster: {}".format(line[0]))
-    #print("Datapoints: {}".format(line[1]))
+    # print("Cluster: {}".format(line[0]))
+    # print("Datapoints: {}".format(line[1]))
+
     try:
-        clusterDict[clusterID] = clusterDict[clusterID] + dataPoints
+        clusterDict[clusterID] = clusterDict[clusterID] + [dataPoints]
     except:
         #handle the case where clusterDict[clusterID] gives 0
-        clusterDict[clusterID] = [] + dataPoints
+        clusterDict[clusterID] = [] + [dataPoints]
 
 
-with open('clusterData.txt', 'a') as f:
-    f.write("---- \n")
-    for key,val in clusterDict.items():
-        data = str(key) + ' : ' + ' '.join(str(v) for v in val)
-        f.write(data)
+#for each clusterID, iterate the list, for each first item in list avg and get the new centroid list for that clusterID
+newCentroidVals = []
+oldCentroidVals = []
 
-#read centroids.txt to get old centroid values
-oldCentroids = getCentroids('centroids.txt')
-newCentroids = oldCentroids[:]
+for key, val in clusterDict.items():
+    #key is clusterID, val is list of lists. Do a column by column addition
+    singleCentroidVals = []
+    for centroidVal in [round(sum(idx)/len(val),2) for idx in zip(*val)]:
+        singleCentroidVals.append(centroidVal)
 
-#for the clusters having datapoints, get the new centroids and update the old centroid with the new one
-for idx in range(len(oldCentroids)):
-    if clusterDict.get(idx):
-        newCenter = math.floor(sum(clusterDict[idx])/len(clusterDict[idx]),5)
-        newCentroids[idx] = newCenter
+    newCentroidVals.append(singleCentroidVals)
 
-print("Old centroids: {}".format(oldCentroids))
-print("New centroids: {}".format(newCentroids))
+#check if old centroid = new centroid
+#load old centroids from file centroids.txt
+with open('centroids.txt', 'r') as f:
+    for line in f:
+        oldCentroidVals.append([float(data) for data in line.split()])
 
-with open('centroids.txt','w') as f:
-    f.write(' '.join(str(point) for point in newCentroids))
+# with open('clusterData.txt', 'a') as f:
+#     f.write("---- \n")
+#     for key,val in clusterDict.items():
+#         data = str(key) + ' : ' + ' '.join(str(v) for v in val)
+#         f.write(data)
 
-#stop the iteration if new centroid = old centroid for centroids with datapoints
-if oldCentroids == newCentroids:
-    print("Stopping iteration!!!")
+if oldCentroidVals == newCentroidVals:
+    with open('stopIteration', 'w') as f:
+        f.write(" ")
 
-# print(clusterDict)
+    #exit the reducer
+    exit(0)
+
+#if different from oldCentroids, update the new centroid in centroids.txt
+
+with open('centroids.txt', 'w') as f:
+    for idx in range(len(newCentroidVals)):
+        f.writelines(' '.join(str(val) for val in newCentroidVals[idx]))
+        f.write("\n")

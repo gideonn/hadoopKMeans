@@ -4,7 +4,7 @@ import random
 def createCentroidsFile(k, inputFile):
 
     with open(inputFile) as f:
-        data = f.readline().split()
+        data = f.readlines().split()
 
     random.shuffle(data)
     centroids = data[:k]

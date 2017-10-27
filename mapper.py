@@ -12,14 +12,14 @@ centroids = []
 def loadCentroids(filename):
     #read centroids from the file
     with open(filename, 'r') as f:
-        centroids.extend(float(center) for center in (f.read().split()))
+        for line in f:
+            centroids.append([float(data) for data in line.split()])
 
-    print("Centroids: {}".format(centroids))
+    # print("Centroids: {}".format(centroids))
 
 
 def getDist(center, points):
-    centerList = [center] * len(points)
-    centerList = np.array(centerList)
+    centerList = np.array(center)
     points = np.array(points)
 
     return np.linalg.norm(centerList - points)
@@ -35,7 +35,7 @@ def kmeansMapper(filename):
         distance = float('inf')
         #Now for each centroid, find euclidean distance from all points
         for idx in range(len(centroids)):
-            if distance > getDist(centroids[idx], points):
+            if distance >= getDist(centroids[idx], points):
                 distance = getDist(centroids[idx], points)
                 kID = idx
 
