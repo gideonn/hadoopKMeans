@@ -1,19 +1,15 @@
+#!/usr/bin/env python
 
-import random
+from random import random
 
 def createCentroidsFile(k, inputFile):
 
-    with open(inputFile) as f:
-        data = f.readlines().split()
+    centroids = [line.split()[2:] for line in open(inputFile) if random() >= .5][:k]
 
-    random.shuffle(data)
-    centroids = data[:k]
-
-    with open('centroids1.txt', 'w') as f:
-        f.write(' '.join(centroids))
-
-    print("Created centroids.txt with centroids as :{}".format(' '.join(centroids)))
-
+    with open('centroids.txt', 'w') as f:
+        for center in centroids:
+            f.write(' '.join(str(point) for point in center))
+            f.write("\n")
 
 def cleanFiles():
     #delete result cluster data points
