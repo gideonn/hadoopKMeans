@@ -30,7 +30,7 @@ oldCentroidVals = []
 for key, val in clusterDict.items():
     #key is clusterID, val is list of lists. Do a column by column addition
     singleCentroidVals = []
-    for centroidVal in [round(sum(idx)/len(val),2) for idx in zip(*val)]:
+    for centroidVal in [round(sum(idx)/len(val),7) for idx in zip(*val)]:
         singleCentroidVals.append(centroidVal)
 
     newCentroidVals.append(singleCentroidVals)
