@@ -154,13 +154,14 @@ def plotGraph(filename, finalData,labels):
     plt.xlabel('PCA1')
     plt.ylabel('PCA2')
 
-    plt.savefig('PCA_' + filename + ".png", dpi=300)
+    plt.savefig(filename + ".png", dpi=300)
     plt.show()
 
 
 if __name__ == '__main__':
 
-    data_set = loadDataSet('./data/cho.txt');
+    inputFile = input("Enter the input file name which was used for processing: ")
+    data_set = loadDataSet(inputFile);
 
     ground_truth_matrix = createGroundTruthMatrix(data_set)
     # print(len(ground_truth_matrix))
@@ -188,4 +189,4 @@ if __name__ == '__main__':
     data, labels = PCA(dataForPCA)
 
     #plot Graph
-    plotGraph('KMeansClustering_PCA_plot',data,labels)
+    plotGraph(inputFile,data,labels)
